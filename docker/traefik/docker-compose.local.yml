@@ -1,0 +1,33 @@
+# Traefik stack — LOCAL
+# Run first: docker compose -f docker/traefik/docker-compose.local.yml up -d
+# Creates the shared traefik_public network and starts Traefik.
+
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: traefik_local
+    restart: unless-stopped
+    command:
+      - "--api.insecure=true"                  # Dashboard at :8080 (local only)
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik_public"
+      - "--entrypoints.web.address=:80"
+      - "--log.level=DEBUG"
+    ports:
+      - "80:80"
+      - "8080:8080"    # Traefik dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik_public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=web"
+
+networks:
+  traefik_public:
+    name: traefik_public
+    driver: bridge

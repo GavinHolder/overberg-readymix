@@ -1,0 +1,29 @@
+# Portainer stack — PRODUCTION
+# Deploy this stack FIRST via docker CLI on the server, then manage all other stacks via Portainer.
+# Requires: PORTAINER_HOST set in environment / .env
+
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer_prod
+    restart: unless-stopped
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - portainer_data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_HOST}`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    networks:
+      - traefik_public
+
+volumes:
+  portainer_data:
+
+networks:
+  traefik_public:
+    external: true
+    name: traefik_public

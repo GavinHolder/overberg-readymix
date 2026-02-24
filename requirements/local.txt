@@ -1,0 +1,8 @@
+-r base.txt
+
+# Debugging
+django-debug-toolbar==5.2.0
+
+# Dev utilities
+ipython==9.3.0
+Werkzeug==3.1.3

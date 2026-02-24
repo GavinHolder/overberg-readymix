@@ -1,0 +1,8 @@
+-r base.txt
+
+# Error tracking
+sentry-sdk[django]==2.29.1
+
+# Performance
+django-redis==5.4.0
+redis==6.2.0

@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Django
+db.sqlite3
+*.sqlite3
+staticfiles/    # collected output (generated)
+mediafiles/
+# Do NOT ignore /static/ — anime.js and source assets live there
+
+# Environment files — NEVER commit production secrets
+.env
+.env.production
+# Commit these (they contain no secrets):
+# .env.local — has no real secrets (dev only)
+# .env.staging — has no real secrets (local staging)
+# .env.production.example — template only
+
+# Docker
+docker-compose.override.yml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Certificates (Traefik)
+docker/traefik/letsencrypt/

@@ -1,0 +1,25 @@
+# Local development override
+# Usage: docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+
+services:
+  web:
+    build:
+      target: local
+    env_file: .env.local
+    environment:
+      DJANGO_SETTINGS_MODULE: Overberg_Readymix.settings.local
+    volumes:
+      - .:/app                # live-reload via bind mount
+    ports:
+      - "8000:8000"           # direct access without Traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.overberg-local.rule=Host(`overberg.localhost`)"
+      - "traefik.http.routers.overberg-local.entrypoints=web"
+      - "traefik.http.services.overberg-local.loadbalancer.server.port=8000"
+    command: python manage.py runserver 0.0.0.0:8000
+
+  db:
+    env_file: .env.local
+    ports:
+      - "5432:5432"           # expose DB for local tools (DBeaver etc.)

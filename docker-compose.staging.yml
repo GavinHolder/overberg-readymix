@@ -1,0 +1,24 @@
+# Staging override — full production-like stack, local Traefik
+# Usage: docker compose -f docker-compose.yml -f docker-compose.staging.yml up --build
+
+services:
+  web:
+    build:
+      target: staging
+    env_file: .env.staging
+    environment:
+      DJANGO_SETTINGS_MODULE: Overberg_Readymix.settings.staging
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.overberg-staging.rule=Host(`overberg-staging.localhost`)"
+      - "traefik.http.routers.overberg-staging.entrypoints=web"
+      - "traefik.http.services.overberg-staging.loadbalancer.server.port=8000"
+
+  db:
+    env_file: .env.staging
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - internal

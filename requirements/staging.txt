@@ -1,0 +1,3 @@
+-r base.txt
+
+# Same as production but no Sentry — errors go to console/logs
